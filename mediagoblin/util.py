@@ -108,6 +108,7 @@ def get_jinja_env(template_loader, locale):
 
 # We'll store context information here when doing unit tests
 TEMPLATE_TEST_CONTEXT = {}
+TEST_MESSAGES = {}
 
 
 def render_template(request, template_path, context):
@@ -129,8 +130,9 @@ def render_template(request, template_path, context):
 
 
 def clear_test_template_context():
-    global TEMPLATE_TEST_CONTEXT
+    global TEMPLATE_TEST_CONTEXT, TEST_MESSAGES
     TEMPLATE_TEST_CONTEXT = {}
+    TEST_MESSAGES = {}
 
 
 def render_to_response(request, template, context):

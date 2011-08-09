@@ -30,15 +30,20 @@ def test_messages(test_app):
     test_app.get('/')
     context = util.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     request = context['request']
-    
+
     # The message queue should be empty
-    assert request.session.get('messages', []) == []
-    
+    #assert request.session.get('messages', []) == []
+    assert request not in util.TEST_MESSAGES
+
     # Adding a message should modify the session accordingly
     add_message(request, 'herp_derp', 'First!')
     test_msg_queue = [{'text': 'First!', 'level': 'herp_derp'}]
-    assert request.session['messages'] == test_msg_queue
-    
+    #assert request.session['messages'] == test_msg_queue
+    assert util.TEST_MESSAGES[request] == test_msg_queue
+
     # fetch_messages should return and empty the queue
     assert fetch_messages(request) == test_msg_queue
-    assert request.session.get('messages') == []
+    #assert request.session.get('messages') == []
+    print request
+    print util.TEST_MESSAGES
+    assert request not in util.TEST_MESSAGES

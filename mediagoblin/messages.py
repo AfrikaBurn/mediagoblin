@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import util
 
 DEBUG = 'debug'
 INFO = 'info'
@@ -25,10 +26,18 @@ def add_message(request, level, text):
     messages.append({'level': level, 'text': text})
     request.session.save()
 
+    if util.TESTS_ENABLED:
+        # TODO: should append, not overwrite
+        util.TEST_MESSAGES[request] = messages
+
 def fetch_messages(request, clear_from_session=True):
     messages = request.session.get('messages')
     if messages and clear_from_session:
         # Save that we removed the messages from the session
         request.session['messages'] = []
         request.session.save()
+
+        if util.TESTS_ENABLED:
+            del util.TEST_MESSAGES[request]
+
     return messages
